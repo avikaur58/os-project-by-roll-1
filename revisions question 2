@@ -1,0 +1,75 @@
+#include<stdio.h>
+#include<pthread.h>
+#include<semaphore.h>
+#include<unistd.h>
+sem_t NS,NW,NE,ES,EW,SW,SN,WN,EN,SE,WS,WE,common;
+struct direction
+{
+int o;
+int d;
+};
+vod print_direction(int , int);
+int origin=0, destination=0;
+int ncount=0;ecount=0;wcount=0;scount=0;
+
+void *North(struct direction *s1)
+{
+sem_wait(&common);
+printf("entering critical section\n")
+ncount++;
+if(ncount==1)
+{
+if(s->d==3)
+{
+sem_wait(&EW);
+sem_wait(&WE);
+sem_wait(&EN);
+sem_wait(&SE);
+}
+else if(s1->d==4)
+{
+sem_wait(&WE);
+sem_wait(&SN);
+sem_wait(&EN);
+sem_wait(&SE);
+}
+}
+sem_post(&common);
+printf("%d from %d\n",s1->o,s1->d);
+print_direction(s1->o,s1->d);
+sem_wait(&common);
+ncount--;
+if(ncount==0)
+{
+if(s1->d==3)
+{
+sem_post(&EW);
+sem_post(&WE);
+sem_post(&EN);
+sem_post(&SE);
+}
+else if(s1->d==4)
+{
+sem_post(&WE);
+sem_post(&SN);
+sem_post(&EN);
+sem_post(&SE);
+}
+}
+sem_post(&common);
+}
+void *East(struct direction *s1)
+{
+}
+void *South(struct direction *s1)
+{
+}
+void *West(struct direction *s1)
+{
+}
+void print_direction(int origin, int destination)
+{
+}
+int main()
+{
+}
