@@ -1,0 +1,32 @@
+#include<stdio.h>
+#include<pthread.h>
+#include<semaphore.h>
+#include<unistd.h>
+sem_t NS,NW,NE,ES,EW,SW,SN,WN,EN,SE,WS,WE,common;
+struct direction
+{
+int o;
+int d;
+};
+vod print_direction(int , int);
+int origin=0, destination=0;
+int ncount=0;ecount=0;wcount=0;scount=0;
+
+void *North(struct direction *s1)
+{
+}
+void *East(struct direction *s1)
+{
+}
+void *South(struct direction *s1)
+{
+}
+void *West(struct direction *s1)
+{
+}
+void print_direction(int origin, int destination)
+{
+}
+int main()
+{
+}
