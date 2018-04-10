@@ -60,9 +60,93 @@ sem_post(&common);
 }
 void *East(struct direction *s1)
 {
+sem_wait(&common);
+printf("entering critical section\n");
+ecount++;
+if(ecount==1)
+{
+if(s1->d==4)
+{
+sem_wait(&NS);
+sem_wait(&SN);
+sem_wait(&WS);
+sem_wait(&SE);
+}
+else if(s1->d==1)
+{
+sem_wait(&NS);
+sem_wait(&WE);
+sem_wait(&WS);
+sem_wait(&SE);
+}
+}
+sem_post(&common);
+print_direction(s1->o,s1->d);
+ecount--;
+if(ecount==0)
+{
+if(s1->d==4)
+{
+sem_post(&NS);
+sem_post(&SN);
+sem_post(&WS);
+sem_post(&SE);
+}
+else if(s1->d==1)
+{
+sem_post(&NS);
+sem_post(&WE);
+sem_post(&WS);
+sem_post(&SE);
+}
+}
+sem_post(&common);
 }
 void *South(struct direction *s1)
 {
+sem_wait(&common);
+printf("entering critical section\n");
+scount++;
+if(scount==1)
+{
+if(s1->d==1)
+{
+sem_wait(&EW);
+sem_wait(&WE);
+sem_wait(&NW);
+sem_wait(&WS);
+}
+else if(s1->d==2)
+{
+sem_wait(&EW);
+sem_wait(&NS);
+sem_wait(&WS);
+sem_wait(&NW);
+}
+}
+sem_post(&common);
+printf("%d from %d\n", s1->o,s1->d);
+print_direction(s1->o,s1->d);
+sem_wait(&common);
+scount--;
+if(scount==0)
+{
+if(s1->d==1)
+{
+sem_post(&EW);
+sem_post(&WE);
+sem_post(&NW);
+sem_post(&WS);
+}
+else if(s1->d==2)
+{
+sem_post(&EW);
+sem_post(&NS);
+sem_post(&WS);
+sem_post(&NW);
+}
+}
+sem_post(&common);
 }
 void *West(struct direction *s1)
 {
