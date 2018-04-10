@@ -150,10 +150,119 @@ sem_post(&common);
 }
 void *West(struct direction *s1)
 {
+sem_wait(&common);
+printf("entering critical section\n");
+wcount++;
+if(wcount==2)
+{
+if(s1->d==1)
+{
+sem_wait(&NS);
+sem_wait(&SN);
+sem_wait(&EN);
+sem_wait(&SW);
+}
+else if(s1->d==3)
+{
+sem_wait(&SN);
+sem_wait(&EW);
+sem_wait(&NW);
+sem_wait(&EN);
+}
+}
+sem_post(&common);
+printf("%d from %d\n",s1->o,s1->d);
+print_direction(s1->o,s1->d);
+sem_wait(&common);
+wcount--;
+if(wcount==0)
+{
+if(s1->d==1)
+{
+sem_post(&NS);
+sem_post(&SN);
+sem_post(&EN);
+sem_post(&SW);
+}
+else if(s1->d==3)
+{
+sem_post(&SN);
+sem_post(&EW);
+sem_post(&NW);
+sem_post(&EN);
+}
+}
+sem_post(&common);
 }
 void print_direction(int origin, int destination)
 {
+switch(origin)
+{
+case 1:
+printf("North");
+break;
+case 2:
+printf("South");
+break;
+case 3:
+printf("East");
+break;
+case 4:
+printf("West");
+break;
+}
+printf("To");
+switch(destination)
+{
+case 1:
+printf("North\n");
+break;
+case 2:
+printf("South\n");
+break;
+case 3:
+printf("East\n");
+break;
+case 4:
+printf("West\n");
+break;
+}
 }
 int main()
 {
+pthread_t v[12];
+sem_init(&NS,0,1);
+sem_init(&SN,0,1);
+sem_init(&NE,0,1);
+sem_init(&EN,0,1);
+sem_init(&NW,0,1);
+sem_init(&WN,0,1);
+sem_init(&ES,0,1);
+sem_init(&SE,0,1);
+sem_init(&EW,0,1);
+sem_init(&WE,0,1);
+sem_init(&SW,0,1);
+sem_init(&WS,0,1);
+sem_init(&common,0,1);
+for(int i=0;i<12;i++)
+{
+struct direction *s2=malloc(sizeof(struct direction));
+s2->o=(rand()%4)+1;
+printf("%d\n",s2->o);
+s2->d=(rand()%4)+1;
+
+while(s2->d==s2->o)
+s2->d=(rand()%4)+1;
+
+if(s2->o==1)
+pthread_create(v+i,NULL,North,(void*)s2);
+else if(s2->o==2)
+pthread_create(v+i,NULL,East,(void*)s2);
+else if(s2->o==3)
+pthread_create(v+i,NULL,West,(void*)s2);
+else if(s2->o==4)
+pthread_create(v+i,NULL,South,(void*)s2);
+
+pthread_join(*(v+i),NULL);
+}
 }
