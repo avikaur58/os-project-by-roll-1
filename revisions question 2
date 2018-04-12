@@ -2,267 +2,281 @@
 #include<pthread.h>
 #include<semaphore.h>
 #include<unistd.h>
+#include<stdlib.h>
 sem_t NS,NW,NE,ES,EW,SW,SN,WN,EN,SE,WS,WE,common;
 struct direction
 {
-int o;
-int d;
+    int o;
+    int d;
 };
-vod print_direction(int , int);
-int origin=0, destination=0;
-int ncount=0;ecount=0;wcount=0;scount=0;
+void print_direction(int , int);
+int origin=0,destination=0;
+
+int ncount=0,ecount=0,wcount=0,scount=0;
 
 void *North(struct direction *s1)
 {
-sem_wait(&common);
-printf("entering critical section\n")
-ncount++;
-if(ncount==1)
-{
-if(s->d==3)
-{
-sem_wait(&EW);
-sem_wait(&WE);
-sem_wait(&EN);
-sem_wait(&SE);
-}
-else if(s1->d==4)
-{
-sem_wait(&WE);
-sem_wait(&SN);
-sem_wait(&EN);
-sem_wait(&SE);
-}
-}
-sem_post(&common);
-printf("%d from %d\n",s1->o,s1->d);
-print_direction(s1->o,s1->d);
-sem_wait(&common);
-ncount--;
-if(ncount==0)
-{
-if(s1->d==3)
-{
-sem_post(&EW);
-sem_post(&WE);
-sem_post(&EN);
-sem_post(&SE);
-}
-else if(s1->d==4)
-{
-sem_post(&WE);
-sem_post(&SN);
-sem_post(&EN);
-sem_post(&SE);
-}
-}
-sem_post(&common);
+    printf("\t\thello 1 - (North)....\n");
+    sem_wait(&common);
+    printf("\t\tentering critical section.....");
+    ncount++;
+    if(ncount==1)
+    {
+        if(s1->d==3)
+        {
+            sem_wait(&EW);
+            sem_wait(&WE);
+            sem_wait(&EN);
+            sem_wait(&SE);
+		}
+        else if(s1->d==4)
+        {
+            sem_wait(&WE);
+            sem_wait(&SN);
+            sem_wait(&EN); 
+            sem_wait(&SE);  
+		}
+    }
+    sem_post(&common);
+    printf("\n%d to %d\n",s1->o,s1->d);
+    print_direction(s1->o,s1->d);
+    sem_wait(&common);
+    ncount--;
+    if(ncount==0)
+    {
+        if(s1->d==3)
+        {
+            sem_post(&EW);
+            sem_post(&WE);
+            sem_post(&EN);
+            sem_post(&SE);
+		}
+        else if(s1->d==4)
+        {
+            sem_post(&WE);
+            sem_post(&SN);
+            sem_post(&EN);
+            sem_post(&SE);
+        }
+    }
+    sem_post(&common);
 }
 void *East(struct direction *s1)
 {
-sem_wait(&common);
-printf("entering critical section\n");
-ecount++;
-if(ecount==1)
-{
-if(s1->d==4)
-{
-sem_wait(&NS);
-sem_wait(&SN);
-sem_wait(&WS);
-sem_wait(&SE);
-}
-else if(s1->d==1)
-{
-sem_wait(&NS);
-sem_wait(&WE);
-sem_wait(&WS);
-sem_wait(&SE);
-}
-}
-sem_post(&common);
-print_direction(s1->o,s1->d);
-ecount--;
-if(ecount==0)
-{
-if(s1->d==4)
-{
-sem_post(&NS);
-sem_post(&SN);
-sem_post(&WS);
-sem_post(&SE);
-}
-else if(s1->d==1)
-{
-sem_post(&NS);
-sem_post(&WE);
-sem_post(&WS);
-sem_post(&SE);
-}
-}
-sem_post(&common);
+    printf("\t\thello 3 - (East)......\n");
+    sem_wait(&common);
+    printf("\t\tentering critical section....");
+    ecount++;
+    if(ecount==1)
+    {
+        if(s1->d==4)
+        {
+            sem_wait(&NS);
+            sem_wait(&SN);
+            sem_wait(&WS);
+            sem_wait(&SE);
+		}
+        else if(s1->d==1)
+        {
+            sem_wait(&NS);
+            sem_wait(&WE);
+            sem_wait(&WS);
+            sem_wait(&SE);
+        }
+    }
+    sem_post(&common);
+	printf("\n%d to %d\n",s1->o,s1->d);
+    print_direction(s1->o,s1->d);    
+    sem_wait(&common);
+    ecount--;
+    if(ecount==0)
+    {
+        if(s1->d==4)
+        {
+            sem_post(&NS);
+            sem_post(&SN);
+            sem_post(&WS);
+            sem_post(&SE);
+		}
+        else if(s1->d==1)
+        {
+            sem_post(&NS);
+            sem_post(&WE);
+            sem_post(&WS);
+            sem_post(&SE);
+        }
+    }
+    sem_post(&common);
 }
 void *South(struct direction *s1)
 {
-sem_wait(&common);
-printf("entering critical section\n");
-scount++;
-if(scount==1)
-{
-if(s1->d==1)
-{
-sem_wait(&EW);
-sem_wait(&WE);
-sem_wait(&NW);
-sem_wait(&WS);
-}
-else if(s1->d==2)
-{
-sem_wait(&EW);
-sem_wait(&NS);
-sem_wait(&WS);
-sem_wait(&NW);
-}
-}
-sem_post(&common);
-printf("%d from %d\n", s1->o,s1->d);
-print_direction(s1->o,s1->d);
-sem_wait(&common);
-scount--;
-if(scount==0)
-{
-if(s1->d==1)
-{
-sem_post(&EW);
-sem_post(&WE);
-sem_post(&NW);
-sem_post(&WS);
-}
-else if(s1->d==2)
-{
-sem_post(&EW);
-sem_post(&NS);
-sem_post(&WS);
-sem_post(&NW);
-}
-}
-sem_post(&common);
+   printf("\t\thello 2 - (South)....\n");
+   sem_wait(&common);
+	printf("\t\tentering critical section....");
+    scount++;
+    if(scount==1)
+    {
+        if(s1->d==1)
+        {
+            sem_wait(&EW);
+            sem_wait(&WE);
+            sem_wait(&NW);
+            sem_wait(&WS);
+
+        }
+        else
+        if(s1->d==2)
+        {
+            sem_wait(&EW);
+            sem_wait(&NS);
+            sem_wait(&WS);
+            sem_wait(&NW);
+    	}
+    }
+    sem_post(&common);
+    printf("\n%d to %d\n",s1->o,s1->d);
+    print_direction(s1->o,s1->d);
+    sem_wait(&common);
+    scount--;
+    if(scount==0)
+    {
+        if(s1->d==1)
+        {
+            sem_post(&EW);
+            sem_post(&WE);
+            sem_post(&NW);
+            sem_post(&WS);
+		}
+        else if(s1->d==2)
+        {
+            sem_post(&EW);
+            sem_post(&NS);
+            sem_post(&WS);
+            sem_post(&NW);
+        }
+    }
+    sem_post(&common);
 }
 void *West(struct direction *s1)
 {
-sem_wait(&common);
-printf("entering critical section\n");
-wcount++;
-if(wcount==2)
-{
-if(s1->d==1)
-{
-sem_wait(&NS);
-sem_wait(&SN);
-sem_wait(&EN);
-sem_wait(&SW);
-}
-else if(s1->d==3)
-{
-sem_wait(&SN);
-sem_wait(&EW);
-sem_wait(&NW);
-sem_wait(&EN);
-}
-}
-sem_post(&common);
-printf("%d from %d\n",s1->o,s1->d);
-print_direction(s1->o,s1->d);
-sem_wait(&common);
-wcount--;
-if(wcount==0)
-{
-if(s1->d==1)
-{
-sem_post(&NS);
-sem_post(&SN);
-sem_post(&EN);
-sem_post(&SW);
-}
-else if(s1->d==3)
-{
-sem_post(&SN);
-sem_post(&EW);
-sem_post(&NW);
-sem_post(&EN);
-}
-}
-sem_post(&common);
+    printf("\t\thello 4 - (West)....\n");
+    sem_wait(&common);
+    printf("\t\tentering critical section....");
+    wcount++;
+    if(wcount==2)
+    {
+        if(s1->d==1)
+        {
+            sem_wait(&NS);
+            sem_wait(&SN);
+            sem_wait(&EN);
+            sem_wait(&SW);
+		}
+        else if(s1->d==3)
+        {
+            sem_wait(&SN);
+            sem_wait(&EW);
+            sem_wait(&NW);
+            sem_wait(&EN);
+        }
+    }
+    sem_post(&common);
+    printf("\n%d to %d\n",s1->o,s1->d);
+    print_direction(s1->o,s1->d);
+    sem_wait(&common);
+    wcount--;
+    if(wcount==0)
+    {
+        if(s1->d==1)
+        {
+            sem_post(&NS);
+            sem_post(&SN);
+            sem_post(&EN);
+            sem_post(&SW);
+		}
+        else if(s1->d==3)
+        {
+            sem_post(&SN);
+            sem_post(&EW);
+            sem_post(&NW);
+            sem_post(&EN);
+        }
+    }
+    sem_post(&common);
 }
 void print_direction(int origin, int destination)
 {
-switch(origin)
-{
-case 1:
-printf("North");
-break;
-case 2:
-printf("South");
-break;
-case 3:
-printf("East");
-break;
-case 4:
-printf("West");
-break;
-}
-printf("To");
-switch(destination)
-{
-case 1:
-printf("North\n");
-break;
-case 2:
-printf("South\n");
-break;
-case 3:
-printf("East\n");
-break;
-case 4:
-printf("West\n");
-break;
-}
+    switch(origin)
+    {
+        case 1:
+        printf("car is coming from North");
+        break;
+        case 2:
+        printf("car is coming from South");
+        break;
+        case 3:
+        printf("car is coming from East");
+        break;
+        case 4:
+        printf("car is coming from West");
+        break;
+    }
+    printf(" and going to ");
+    switch(destination)
+    {
+        case 1:
+        printf("North\n\n");
+        break;
+        case 2:
+        printf("South\n\n");
+        break;
+        case 3:
+        printf("East\n\n");
+        break;
+        case 4:
+        printf("West\n\n");
+        break;
+    }
 }
 int main()
 {
-pthread_t v[12];
-sem_init(&NS,0,1);
-sem_init(&SN,0,1);
-sem_init(&NE,0,1);
-sem_init(&EN,0,1);
-sem_init(&NW,0,1);
-sem_init(&WN,0,1);
-sem_init(&ES,0,1);
-sem_init(&SE,0,1);
-sem_init(&EW,0,1);
-sem_init(&WE,0,1);
-sem_init(&SW,0,1);
-sem_init(&WS,0,1);
-sem_init(&common,0,1);
-for(int i=0;i<12;i++)
-{
-struct direction *s2=malloc(sizeof(struct direction));
-s2->o=(rand()%4)+1;
-printf("%d\n",s2->o);
-s2->d=(rand()%4)+1;
-
-while(s2->d==s2->o)
-s2->d=(rand()%4)+1;
-
-if(s2->o==1)
-pthread_create(v+i,NULL,North,(void*)s2);
-else if(s2->o==2)
-pthread_create(v+i,NULL,East,(void*)s2);
-else if(s2->o==3)
-pthread_create(v+i,NULL,West,(void*)s2);
-else if(s2->o==4)
-pthread_create(v+i,NULL,South,(void*)s2);
-
-pthread_join(*(v+i),NULL);
+	printf("\t\t\t1 - NORTH");
+	printf("\n\t\t\t2 - SOUTH");
+	printf("\n\t\t\t3 - EAST");
+	printf("\n\t\t\t4 - WEST\n\n");
+	int i;
+    pthread_t v[12];
+    sem_init(&NS,0,1);
+    sem_init(&SN,0,1);
+    sem_init(&NE,0,1);
+    sem_init(&EN,0,1);
+    sem_init(&NW,0,1);
+    sem_init(&WN,0,1);
+    sem_init(&ES,0,1);
+    sem_init(&SE,0,1);
+    sem_init(&EW,0,1);
+    sem_init(&WE,0,1);
+    sem_init(&SW,0,1);
+    sem_init(&WS,0,1);
+    sem_init(&common,0,1);
+    for(i=0;i<12;i++)
+    {
+        struct direction *s2= malloc(sizeof(struct direction));
+        s2->o= (rand() % 4)+1;
+        printf("Origin %d\n",s2->o);
+        s2->d=(rand() %4)+1;
+        while(s2->d==s2->o)
+        s2->d=(rand() %4)+1;       
+       	if(s2->o==1)
+        	pthread_create(v+i,NULL,North,(void*)s2);
+       	else if(s2->o==2)
+        	pthread_create(v+i,NULL,South,(void*)s2);
+       	else if(s2->o==3)
+        	pthread_create(v+i,NULL,East,(void*)s2);
+        else if(s2->o==4)
+        	pthread_create(v+i,NULL,West,(void*)s2);
+        pthread_join(*(v+i),NULL);
+	}
 }
-}
+
+
